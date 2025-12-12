@@ -29,3 +29,17 @@ jobs:
     - name: Build Docker Image
       working-directory: task2-ci-cd/app
       run: docker build -t task2-image .
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+      -name: Install dependencies
+      run: npm install
+
+      -name: Run build
+      run: npm run build
+
+      -name: Run tests
+      run: npm test
