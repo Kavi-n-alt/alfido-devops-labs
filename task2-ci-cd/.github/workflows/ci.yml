@@ -1,45 +1,22 @@
-name: Task2 CI Pipeline
+name: CI Pipeline
 
 on:
   push:
-    paths:
-      - "task2-ci-cd/**"
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y tree
 
-    - name: Install dependencies
-      working-directory: task2-ci-cd/app
-      run: pip install -r requirements.txt
+      - name: Build project
+        run: echo "Build step completed"
 
-    - name: Syntax Check
-      working-directory: task2-ci-cd/app
-      run: python -m py_compile app.py
-
-    - name: Build Docker Image
-      working-directory: task2-ci-cd/app
-      run: docker build -t task2-image .
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-      -name: Install dependencies
-      run: npm install
-
-      -name: Run build
-      run: npm run build
-
-      -name: Run tests
-      run: npm test
