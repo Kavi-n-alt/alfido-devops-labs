@@ -1,22 +1,31 @@
-name: CI Pipeline
+name: Task2 CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    paths:
+      - "task2-ci-cd/**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y tree
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
 
-      - name: Build project
-        run: echo "Build step completed"
+    - name: Install dependencies
+      working-directory: task2-ci-cd/app
+      run: pip install -r requirements.txt
 
+    - name: Syntax Check
+      working-directory: task2-ci-cd/app
+      run: python -m py_compile app.py
+
+    - name: Build Docker Image
+      working-directory: task2-ci-cd/app
+      run: docker build -t task2-image .
